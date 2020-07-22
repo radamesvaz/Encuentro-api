@@ -5,10 +5,14 @@ const mysql = require('mysql');
 const fs = require('fs');
 require('dotenv').config();
 const knex = require('knex');
+const bcrypt = require('bcrypt-nodejs');
 
 
 // LLamando a los controladores
 const home = require('./controllers/Home');
+const registro = require('./controllers/Registro');
+const inicioSesion = require('./controllers/IniciarSesion');
+const borrarUsuario = require('./controllers/BorrarUsuario');
 
 const db = knex({
     client: 'mysql',
@@ -37,7 +41,16 @@ app.get('/', (req, res) => {res.json('estoy vivo!')});
 //Obtener todos los productos
 app.get('/home', (req, res) => { home.handleHome(req, res, db) });
 
+//Registro
+app.post('/registro', (req, res) =>  { registro.handleRegistro(req, res, db, bcrypt) });
 
+//Iniciar Sesion
+app.post('/iniciar-sesion', (req, res) =>  { inicioSesion.handleInicioSesion(req, res, db, bcrypt) });
+
+//Borrar Usuario
+app.delete('/borrar-producto/:id', (req, res) => {borrarUsuario.handleBorrarUsuario(req, res, db)});
+
+//Modificar Usuario
 
 
 
