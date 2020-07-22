@@ -12,6 +12,7 @@ const bcrypt = require('bcrypt-nodejs');
 const home = require('./controllers/Home');
 const registro = require('./controllers/Registro');
 const inicioSesion = require('./controllers/IniciarSesion');
+const modificarUsuario = require('./controllers/ModificarUsuario');
 const borrarUsuario = require('./controllers/BorrarUsuario');
 
 const db = knex({
@@ -48,10 +49,10 @@ app.post('/registro', (req, res) =>  { registro.handleRegistro(req, res, db, bcr
 app.post('/iniciar-sesion', (req, res) =>  { inicioSesion.handleInicioSesion(req, res, db, bcrypt) });
 
 //Borrar Usuario
-app.delete('/borrar-producto/:id', (req, res) => {borrarUsuario.handleBorrarUsuario(req, res, db)});
+app.delete('/borrar-usuario/:id', (req, res) => {borrarUsuario.handleBorrarUsuario(req, res, db)});
 
 //Modificar Usuario
-
+app.patch('/modificar-usuario/:id', (req, res) => {modificarUsuario.handleModificarUsuario(req, res, db, bcrypt)});
 
 
 const port = process.env.PORT || 3000;
