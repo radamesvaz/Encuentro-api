@@ -1,5 +1,5 @@
-const handleHome = (req, res, db) => {
-    db.select().table('registro')
+const handleHomePosts = (req, res, db) => {
+    db.select().table('posts')
     .then(response => {
         res.json(response);
     })
@@ -7,5 +7,5 @@ const handleHome = (req, res, db) => {
 }
 
 module.exports = {
-    handleHome: handleHome
+    handleHomePosts: handleHomePosts
 }
