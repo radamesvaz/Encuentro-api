@@ -15,6 +15,7 @@ const inicioSesion = require('./controllers/IniciarSesion');
 const modificarUsuario = require('./controllers/ModificarUsuario');
 const borrarUsuario = require('./controllers/BorrarUsuario');
 
+const buscarPostId = require('./controllers/BuscarPostId')
 const modificarPost = require('./controllers/ModificarPost');
 const borrarPost = require('./controllers/BorrarPost');
 
@@ -64,6 +65,9 @@ app.patch('/modificar-usuario/:id', (req, res) => {modificarUsuario.handleModifi
 
 //-------- Endpoints de los posts
 
+//Buscar Post por ID
+app.get('/buscar-post/:id', (req, res) => {buscarPostId.handleBuscarPostId(req, res, db)});
+
 //Agregar Post
 app.use('/agregar-post', upload.array('image'), async(req, res) => {
   const uploader = async (path) => await cloudinary.uploads(path, 'Encuentro');
@@ -74,7 +78,8 @@ app.use('/agregar-post', upload.array('image'), async(req, res) => {
 
   const { 
     titulo, 
-    descripcion 
+    descripcion,
+    tiempo 
       } = req.body;
 
     const fecha = new Date();
@@ -100,6 +105,7 @@ app.use('/agregar-post', upload.array('image'), async(req, res) => {
              db('posts').insert({
               titulo,
               descripcion,
+              tiempo,
               fecha,   
               imagen: safeUrl   
            }).then(res.status(200).json('post agregado'))

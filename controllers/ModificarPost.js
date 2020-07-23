@@ -2,12 +2,14 @@ const handleModificarPost = (req, res, db) =>{
     const { id } = req.params;
      const { 
         titulo,
-        descripcion
+        descripcion,
+        tiempo
         } = req.body;
 
                db('posts').where({ id: id }).update({     
                 titulo,
-                descripcion
+                descripcion,
+                tiempo
              }).then(res.status(200).json('post actualizado'))
           
          
