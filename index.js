@@ -79,10 +79,10 @@ app.use('/agregar-post', upload.array('image'), async(req, res) => {
   const { 
     titulo, 
     descripcion,
-    tiempo 
+    tiempo,
+    fecha 
       } = req.body;
 
-    const fecha = new Date();
 
   if (req.method === 'POST') {
       const urls = [];
