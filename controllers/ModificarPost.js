@@ -3,13 +3,13 @@ const handleModificarPost = (req, res, db) =>{
      const { 
         titulo,
         descripcion,
-        tiempo
+        fecha
         } = req.body;
 
                db('posts').where({ id: id }).update({     
                 titulo,
                 descripcion,
-                tiempo
+                fecha
              }).then(res.status(200).json('post actualizado'))
           
          
