@@ -176,6 +176,21 @@ app.get('/imagenes-galeria', (req, res) => {
 .catch(err => res.status(500).json('problema con la base de datos + ' + err))
 })
 
+//Buscar imagen por ID
+app.get('buscar-imagen/:id', (req, res) => {
+  const { id } = req.params;
+  db.select('*').from('galeria').where({
+    id: id
+}).then(post => {
+    if(post.length){
+        res.json(post[0])
+    }else{
+        res.status(400).json('imagen no encontrada')
+    }
+})
+.catch(err => res.status(400).json('error buscando imagen'))
+})
+
 //Agregar imagen a Galeria
 app.use('/agregar-imagen-galeria', upload.array('image'), async(req, res) => {
   const uploader = async (path) => await cloudinary.uploads(path, 'Encuentro');
