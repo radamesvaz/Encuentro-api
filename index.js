@@ -165,6 +165,108 @@ app.use('/modificar-imagen-post/:id', upload.array('image'), async(req, res) => 
 app.delete('/borrar-post/:id', (req, res) => {borrarPost.handleBorrarPost(req, res, db)});
 
 
+// -- Galeria
+
+//Buscar todas las imagenes
+app.get('/imagenes-galeria', (req, res) => {
+  db.select().table('galeria')
+  .then(response => {
+      res.json(response);
+  })
+.catch(err => res.status(500).json('problema con la base de datos + ' + err))
+})
+
+//Agregar imagen a Galeria
+app.use('/agregar-imagen-galeria', upload.array('image'), async(req, res) => {
+  const uploader = async (path) => await cloudinary.uploads(path, 'Encuentro');
+  let safeUrl = '';
+  const insert = (str, index, value) => {
+    safeUrl = str.substr(0, index) + value + str.substr(index);
+}
+
+
+  if (req.method === 'POST') {
+      const urls = [];
+      const files = req.files;
+
+      for(const file of files) {
+          const { path } = file;
+
+          const newPath = await uploader(path);
+
+          urls.push(newPath);
+
+          fs.unlinkSync(path);
+      
+          };
+
+          const unsafeUrl = urls[0].url;
+          insert(unsafeUrl, 4, 's');
+
+             db('galeria').insert({
+              imagen: safeUrl   
+           }).then(res.status(200).json('imagen agregada'))
+             // id: urls[0].id
+        } else {
+      res.status(405).json({
+          err: "No se pudo subir la imagen"
+      })
+  }
+})
+
+//Modificar imagen Galeria
+app.use('/modificar-imagen-galeria/:id', upload.array('image'), async(req, res) => {
+  const uploader = async (path) => await cloudinary.uploads(path, 'Encuentro');
+  let safeUrl = '';
+  const insert = (str, index, value) => {
+    safeUrl = str.substr(0, index) + value + str.substr(index);
+}
+  const { id } = req.params;
+  if (req.method === 'PATCH') {
+      const urls = [];
+      const files = req.files;
+
+      for(const file of files) {
+          const { path } = file;
+
+          const newPath = await uploader(path);
+
+          urls.push(newPath);
+
+          fs.unlinkSync(path);
+      
+          };
+          const unsafeUrl = urls[0].url;
+          insert(unsafeUrl, 4, 's');
+
+            db('galeria').where({id: id}).update({             
+              imagen: safeUrl
+             // id: urls[0].id
+
+          })
+             .then(console.log)           
+          
+      res.status(200).json('exito');
+  } else {
+      res.status(405).json({
+          err: "No se pudo subir la imagen"
+      })
+  }
+  
+})
+
+//Eliminar imagen Galeria
+app.delete('/eliminar-imagen-galeria/:id', (req, res) => {
+  const { id } = req.params;
+  db('galeria').where({ id: id})
+  .del()
+  .then(res.json('borrado exitoso!'))
+})
+
+
+
+
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log(`I'm alive here ${port}`))
