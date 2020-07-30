@@ -177,7 +177,7 @@ app.get('/imagenes-galeria', (req, res) => {
 })
 
 //Buscar imagen por ID
-app.get('buscar-imagen/:id', (req, res) => {
+app.get('/buscar-imagen/:id', (req, res) => {
   const { id } = req.params;
   db.select('*').from('galeria').where({
     id: id
