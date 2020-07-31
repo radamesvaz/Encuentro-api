@@ -4,7 +4,7 @@ const handleRegistro = (req, res, db, bcrypt) => {
     if(!email || !usuario || !password){
         return res.status(400).json('por favor llena todos los campos');
     }
-
+ 
         db.insert({
             email,
             usuario,
