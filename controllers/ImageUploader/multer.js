@@ -13,8 +13,8 @@ const storage = multer.diskStorage ({
 
 // file Validation
 
-const   fileFilter = (req, file, cb) => {
-    if (!file.mimetype.match(/jpe|jpeg|png|gif$i/)) {
+const fileFilter = (req, file, cb) => {
+    if (!file.mimetype.match(/jpe|jpeg|png|mp4|gif$i/)) {
       cb(new Error('Este tipo de archivo no es permitido, solo .JPG y .PNG'), false)
       return
     }
@@ -24,7 +24,7 @@ const   fileFilter = (req, file, cb) => {
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 1024 * 1024 },
+    limits: { fileSize: 15 * 1024 * 1024 },
     fileFilter: fileFilter
 });
 
