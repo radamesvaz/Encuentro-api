@@ -198,8 +198,6 @@ app.use('/agregar-imagen-galeria', upload.array('image'), async(req, res) => {
   const insert = (str, index, value) => {
     safeUrl = str.substr(0, index) + value + str.substr(index);
 }
-
-
   if (req.method === 'POST') {
       const urls = [];
       const files = req.files;
@@ -274,6 +272,117 @@ app.use('/modificar-imagen-galeria/:id', upload.array('image'), async(req, res) 
 app.delete('/eliminar-imagen-galeria/:id', (req, res) => {
   const { id } = req.params;
   db('galeria').where({ id: id})
+  .del()
+  .then(res.json('borrado exitoso!'))
+})
+
+
+
+//Buscar todos los videos
+app.get('/videos-galeria', (req, res) => {
+  db.select().table('galeriaVideos')
+  .then(response => {
+      res.json(response);
+  })
+.catch(err => res.status(500).json('problema con la base de datos + ' + err))
+})
+
+//Buscar video por ID
+app.get('/buscar-video/:id', (req, res) => {
+  const { id } = req.params;
+  db.select('*').from('galeriaVideos').where({
+    id: id
+}).then(post => {
+    if(post.length){
+        res.json(post[0])
+    }else{
+        res.status(400).json('video no encontrado')
+    }
+})
+.catch(err => res.status(400).json('error buscando imagen'))
+})
+
+//Agregar video a Galeria
+app.use('/agregar-video-galeria', upload.array('video'), async(req, res) => {
+  const uploader = async (path) => await cloudinary.uploads(path, 'Encuentro');
+  let safeUrl = '';
+  const insert = (str, index, value) => {
+    safeUrl = str.substr(0, index) + value + str.substr(index);
+}
+  if (req.method === 'POST') {
+      const urls = [];
+      const files = req.files;
+
+      for(const file of files) {
+          const { path } = file;
+
+          const newPath = await uploader(path);
+
+          urls.push(newPath);
+
+          fs.unlinkSync(path);
+      
+          };
+
+          const unsafeUrl = urls[0].url;
+          insert(unsafeUrl, 4, 's');
+
+             db('galeriaVideos').insert({
+              video: safeUrl   
+           }).then(res.status(200).json('video agregado'))
+             // id: urls[0].id
+        } else {
+      res.status(405).json({
+          err: "No se pudo subir la imagen"
+      })
+  }
+})
+
+//Modificar video Galeria
+app.use('/modificar-video-galeria/:id', upload.array('video'), async(req, res) => {
+  const uploader = async (path) => await cloudinary.uploads(path, 'Encuentro');
+  let safeUrl = '';
+  const insert = (str, index, value) => {
+    safeUrl = str.substr(0, index) + value + str.substr(index);
+}
+  const { id } = req.params;
+  if (req.method === 'PATCH') {
+      const urls = [];
+      const files = req.files;
+
+      for(const file of files) {
+          const { path } = file;
+
+          const newPath = await uploader(path);
+
+          urls.push(newPath);
+
+          fs.unlinkSync(path);
+      
+          };
+          const unsafeUrl = urls[0].url;
+          insert(unsafeUrl, 4, 's');
+
+            db('galeriaVideos').where({id: id}).update({             
+              video: safeUrl
+             // id: urls[0].id
+
+          })
+             .then(console.log)           
+          
+      res.status(200).json('exito');
+  } else {
+      res.status(405).json({
+          err: "No se pudo subir la imagen"
+      })
+  }
+  
+})
+
+//Eliminar video Galeria
+app.delete('/eliminar-video-galeria/:id', (req, res) => {
+  const { id } = req.params;
+  db('galeriaVideos').where({ id: id})
   .del()
   .then(res.json('borrado exitoso!'))
 })
