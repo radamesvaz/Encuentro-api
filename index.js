@@ -42,7 +42,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-  
 //Inicio de endpoints
 
 app.get('/', (req, res) => {res.json('estoy vivo!')});
