@@ -22,7 +22,7 @@ const borrarPost = require('./controllers/BorrarPost');
 // Llamando a Uploads y Cloudinary
 const upload = require('./controllers/ImageUploader/multer');
 const cloudinary = require('./controllers/ImageUploader/Cloudinary');
-
+ 
 const db = knex({
     client: 'mysql',
     connection: {
