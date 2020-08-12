@@ -63,7 +63,7 @@ app.patch('/modificar-usuario/:id', (req, res) => {modificarUsuario.handleModifi
 
 
 //-------- Endpoints de los posts
-
+ 
 //Buscar Post por ID
 app.get('/buscar-post/:id', (req, res) => {buscarPostId.handleBuscarPostId(req, res, db)});
 
