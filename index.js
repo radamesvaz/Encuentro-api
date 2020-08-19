@@ -20,7 +20,7 @@ const modificarPost = require('./controllers/ModificarPost');
 const borrarPost = require('./controllers/BorrarPost');
 
 const agregarVideo = require('./controllers/AgregarVideo');
-const agregarVideo = require('./controllers/ModificarVideo'); //handleModificarVideo
+const modificarVideo = require('./controllers/ModificarVideo'); //handleModificarVideo
 
 // Llamando a Uploads y Cloudinary
 const upload = require('./controllers/ImageUploader/multer');
@@ -344,7 +344,7 @@ app.use('/agregar-video-galeria', upload.array('video'), async(req, res) => {
 })
 */
 //Modificar video Galeria
-app.patch('/modificar-video-galeria', (req, res) =>{modificarVideo.handleModificarVideo(req, res, db)})
+app.patch('/modificar-video-galeria/:id', (req, res) =>{modificarVideo.handleModificarVideo(req, res, db)})
 
 /*
 app.use('/modificar-video-galeria/:id', upload.array('video'), async(req, res) => {
