@@ -19,6 +19,9 @@ const buscarPostId = require('./controllers/BuscarPostId')
 const modificarPost = require('./controllers/ModificarPost');
 const borrarPost = require('./controllers/BorrarPost');
 
+const agregarVideo = require('./controllers/AgregarVideo');
+const agregarVideo = require('./controllers/ModificarVideo'); //handleModificarVideo
+
 // Llamando a Uploads y Cloudinary
 const upload = require('./controllers/ImageUploader/multer');
 const cloudinary = require('./controllers/ImageUploader/Cloudinary');
@@ -302,6 +305,9 @@ app.get('/buscar-video/:id', (req, res) => {
 })
 
 //Agregar video a Galeria
+app.post('/agregar-video-galeria', (req, res) =>{agregarVideo.handleAgregarVideo(req, res, db)})
+
+/* ---- Este codigo para agregar el video a la nuble
 app.use('/agregar-video-galeria', upload.array('video'), async(req, res) => {
   const uploader = async (path) => await cloudinary.uploads(path, 'Encuentro');
   let safeUrl = '';
@@ -336,8 +342,11 @@ app.use('/agregar-video-galeria', upload.array('video'), async(req, res) => {
       })
   }
 })
-
+*/
 //Modificar video Galeria
+app.patch('/modificar-video-galeria', (req, res) =>{modificarVideo.handleModificarVideo(req, res, db)})
+
+/*
 app.use('/modificar-video-galeria/:id', upload.array('video'), async(req, res) => {
   const uploader = async (path) => await cloudinary.uploads(path, 'Encuentro');
   let safeUrl = '';
@@ -377,7 +386,7 @@ app.use('/modificar-video-galeria/:id', upload.array('video'), async(req, res) =
   }
   
 })
-
+*/
 //Eliminar video Galeria
 app.delete('/eliminar-video-galeria/:id', (req, res) => {
   const { id } = req.params;
